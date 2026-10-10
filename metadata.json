@@ -1,0 +1,6 @@
+{
+  "name": "HYDRA MOTORSPORT",
+  "description": "RACING. ENGINEERING. TECHNOLOGY. An independent motorsport venture built around racing, engineering, data-driven technology and long-term powertrain innovation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
