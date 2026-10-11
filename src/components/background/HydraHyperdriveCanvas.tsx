@@ -118,134 +118,38 @@ export const HydraHyperdriveCanvas: React.FC<HydraHyperdriveCanvasProps> = ({
     heroTexture.colorSpace = THREE.SRGBColorSpace;
 
     // High quality 2026 F1 car backdrop panel with alpha blending
-    const carPlaneGeo = new THREE.PlaneGeometry(7.2, 4.05);
+    const carPlaneGeo = new THREE.PlaneGeometry(8.6, 4.84, 16, 9);
     const carPlaneMat = new THREE.MeshStandardMaterial({
       map: heroTexture,
       transparent: true,
-      opacity: 0.94,
-      roughness: 0.4,
-      metalness: 0.2,
+      opacity: 0.95,
+      roughness: 0.35,
+      metalness: 0.25,
       depthWrite: true,
+      wireframe: wireframeMode,
     });
     const carPlaneMesh = new THREE.Mesh(carPlaneGeo, carPlaneMat);
-    carPlaneMesh.position.set(0, 0.55, -0.1);
+    carPlaneMesh.position.set(0, 0.45, 0.0);
     carGroup.add(carPlaneMesh);
 
-    // Formula 3D Chassis & Aerodynamic geometry overlay (Halo, front wing, nose, sidepods, diffuser)
-    // Materials: Matte carbon black with red highlights & wireframe toggle support
-    const carbonMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0c0d10,
-      roughness: 0.32,
-      metalness: 0.65,
-      wireframe: wireframeMode,
-    });
-
-    const redAccentMaterial = new THREE.MeshStandardMaterial({
-      color: 0xdc2626,
-      roughness: 0.2,
-      metalness: 0.5,
-      emissive: 0x991b1b,
-      emissiveIntensity: 0.2,
-      wireframe: wireframeMode,
-    });
-
-    const metallicDarkMat = new THREE.MeshStandardMaterial({
-      color: 0x18181b,
-      roughness: 0.2,
-      metalness: 0.85,
-      wireframe: wireframeMode,
-    });
-
-    // 3D Nose cone & Monocoque
-    const noseGeo = new THREE.ConeGeometry(0.24, 2.2, 8);
-    noseGeo.rotateX(Math.PI / 2);
-    const noseMesh = new THREE.Mesh(noseGeo, carbonMaterial);
-    noseMesh.position.set(0, -0.15, 1.6);
-    noseMesh.scale.set(1.4, 0.45, 1);
-    carGroup.add(noseMesh);
-
-    // Front Wing Mainplane
-    const frontWingGeo = new THREE.BoxGeometry(2.8, 0.04, 0.5);
-    const frontWingMesh = new THREE.Mesh(frontWingGeo, carbonMaterial);
-    frontWingMesh.position.set(0, -0.38, 2.6);
-    carGroup.add(frontWingMesh);
-
-    // Front Wing Endplates with Red Accent
-    const endplateGeo = new THREE.BoxGeometry(0.04, 0.28, 0.52);
-    const leftEndplate = new THREE.Mesh(endplateGeo, redAccentMaterial);
-    leftEndplate.position.set(-1.4, -0.28, 2.6);
-    const rightEndplate = new THREE.Mesh(endplateGeo, redAccentMaterial);
-    rightEndplate.position.set(1.4, -0.28, 2.6);
-    carGroup.add(leftEndplate);
-    carGroup.add(rightEndplate);
-
-    // Halo safety hoop structure
-    const haloCurve = new THREE.EllipseCurve(0, 0, 0.45, 0.55, 0, Math.PI, false, 0);
-    const haloPoints = haloCurve.getPoints(24).map(p => new THREE.Vector3(p.x, 0.38, p.y + 0.3));
-    const haloGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(haloPoints), 24, 0.045, 8, false);
-    const haloMesh = new THREE.Mesh(haloGeo, metallicDarkMat);
-    carGroup.add(haloMesh);
-
-    // Halo central pylon
-    const haloPylonGeo = new THREE.CylinderGeometry(0.03, 0.04, 0.45, 8);
-    const haloPylon = new THREE.Mesh(haloPylonGeo, metallicDarkMat);
-    haloPylon.position.set(0, 0.15, 0.82);
-    haloPylon.rotation.x = -0.3;
-    carGroup.add(haloPylon);
-
-    // Sidepods with aerodynamic undercut
-    const sidepodGeo = new THREE.BoxGeometry(0.55, 0.35, 1.8);
-    const leftSidepod = new THREE.Mesh(sidepodGeo, carbonMaterial);
-    leftSidepod.position.set(-0.85, -0.1, 0.1);
-    const rightSidepod = new THREE.Mesh(sidepodGeo, carbonMaterial);
-    rightSidepod.position.set(0.85, -0.1, 0.1);
-    carGroup.add(leftSidepod);
-    carGroup.add(rightSidepod);
-
-    // Rear wing assembly
-    const rearWingGeo = new THREE.BoxGeometry(2.1, 0.05, 0.45);
-    const rearWingMesh = new THREE.Mesh(rearWingGeo, carbonMaterial);
-    rearWingMesh.position.set(0, 0.55, -2.1);
-    carGroup.add(rearWingMesh);
-
-    const rearEndplateGeo = new THREE.BoxGeometry(0.04, 0.5, 0.5);
-    const leftRearEndplate = new THREE.Mesh(rearEndplateGeo, redAccentMaterial);
-    leftRearEndplate.position.set(-1.05, 0.45, -2.1);
-    const rightRearEndplate = new THREE.Mesh(rearEndplateGeo, redAccentMaterial);
-    rightRearEndplate.position.set(1.05, 0.45, -2.1);
-    carGroup.add(leftRearEndplate);
-    carGroup.add(rightRearEndplate);
-
-    // Slick Racing Tyres with satin rim
-    const tyreGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.48, 20);
-    tyreGeo.rotateZ(Math.PI / 2);
-    const tyreMat = new THREE.MeshStandardMaterial({
-      color: 0x08080a,
-      roughness: 0.65,
-      metalness: 0.1,
-      wireframe: wireframeMode,
-    });
-
-    const frontLeftTyre = new THREE.Mesh(tyreGeo, tyreMat);
-    frontLeftTyre.position.set(-1.35, -0.22, 1.8);
-    const frontRightTyre = new THREE.Mesh(tyreGeo, tyreMat);
-    frontRightTyre.position.set(1.35, -0.22, 1.8);
-    const rearLeftTyre = new THREE.Mesh(tyreGeo, tyreMat);
-    rearLeftTyre.position.set(-1.38, -0.2, -1.8);
-    rearLeftTyre.scale.set(1.08, 1.25, 1.08);
-    const rearRightTyre = new THREE.Mesh(tyreGeo, tyreMat);
-    rearRightTyre.position.set(1.38, -0.2, -1.8);
-    rearRightTyre.scale.set(1.08, 1.25, 1.08);
-
-    carGroup.add(frontLeftTyre);
-    carGroup.add(frontRightTyre);
-    carGroup.add(rearLeftTyre);
-    carGroup.add(rearRightTyre);
+    // Subtle CAD telemetry wireframe overlay when in wireframe mode
+    if (wireframeMode) {
+      const wireframeOverlayGeo = new THREE.PlaneGeometry(8.6, 4.84, 36, 20);
+      const wireframeOverlayMat = new THREE.MeshBasicMaterial({
+        color: 0xdc2626,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4,
+      });
+      const wireframeOverlayMesh = new THREE.Mesh(wireframeOverlayGeo, wireframeOverlayMat);
+      wireframeOverlayMesh.position.set(0, 0.45, 0.01);
+      carGroup.add(wireframeOverlayMesh);
+    }
 
     scene.add(carGroup);
 
     // 7. HYDRA Energy Trails (Layer C)
-    const particleCount = 280;
+    const particleCount = 200;
     const trailGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -262,21 +166,21 @@ export const HydraHyperdriveCanvas: React.FC<HydraHyperdriveCanvasProps> = ({
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
 
-      // Span along car trajectory
-      const lane = (Math.random() - 0.5) * 3.2;
-      const heightOffset = -0.3 + Math.random() * 1.4;
-      const z = 3.5 - Math.random() * 8.0;
+      // Span along car trajectory at natural background depths (behind camera, around car)
+      const lane = (Math.random() - 0.5) * 3.6;
+      const heightOffset = -0.2 + Math.random() * 1.2;
+      const z = 1.2 - Math.random() * 5.5;
 
       positions[i * 3] = lane;
       positions[i * 3 + 1] = heightOffset;
       positions[i * 3 + 2] = z;
 
       velocities.push({
-        x: (Math.random() - 0.5) * 0.003,
-        y: Math.sin(lane) * 0.002,
-        z: -0.04 - Math.random() * 0.07,
+        x: (Math.random() - 0.5) * 0.002,
+        y: Math.sin(lane) * 0.001,
+        z: -0.03 - Math.random() * 0.05,
         speed: 1.0,
-        resetZ: 3.8,
+        resetZ: 1.4,
       });
     }
 
@@ -299,7 +203,7 @@ export const HydraHyperdriveCanvas: React.FC<HydraHyperdriveCanvasProps> = ({
     const particleTexture = new THREE.CanvasTexture(particleCanvas);
 
     const trailMaterial = new THREE.PointsMaterial({
-      size: 0.14,
+      size: 0.08,
       map: particleTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -310,22 +214,22 @@ export const HydraHyperdriveCanvas: React.FC<HydraHyperdriveCanvasProps> = ({
     const particles = new THREE.Points(trailGeometry, trailMaterial);
     scene.add(particles);
 
-    // Continuous spline airflow ribbons (sweeping red telemetry traces)
+    // Continuous spline airflow ribbons (subtle background streamlines)
     const ribbonCurves: THREE.Line[] = [];
     const ribbonMaterial = new THREE.LineBasicMaterial({
       color: 0xdc2626,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.35,
       blending: THREE.AdditiveBlending,
     });
 
     const createRibbon = (offsetY: number, offsetX: number) => {
       const curve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(offsetX * 0.4, offsetY - 0.2, 3.2),
-        new THREE.Vector3(offsetX * 0.7, offsetY + 0.1, 1.8),
-        new THREE.Vector3(offsetX * 1.1, offsetY + 0.2, 0.4),
-        new THREE.Vector3(offsetX * 0.9, offsetY + 0.35, -1.2),
-        new THREE.Vector3(offsetX * 0.4, offsetY + 0.5, -2.6),
+        new THREE.Vector3(offsetX * 0.4, offsetY - 0.1, 1.2),
+        new THREE.Vector3(offsetX * 0.7, offsetY + 0.1, 0.4),
+        new THREE.Vector3(offsetX * 1.0, offsetY + 0.2, -0.4),
+        new THREE.Vector3(offsetX * 0.8, offsetY + 0.3, -1.4),
+        new THREE.Vector3(offsetX * 0.4, offsetY + 0.4, -2.4),
       ]);
       const pts = curve.getPoints(50);
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
@@ -334,10 +238,10 @@ export const HydraHyperdriveCanvas: React.FC<HydraHyperdriveCanvasProps> = ({
       ribbonCurves.push(line);
     };
 
-    createRibbon(0.1, 0.8);
-    createRibbon(0.1, -0.8);
-    createRibbon(0.3, 0.4);
-    createRibbon(0.3, -0.4);
+    createRibbon(0.1, 0.9);
+    createRibbon(0.1, -0.9);
+    createRibbon(0.3, 0.5);
+    createRibbon(0.3, -0.5);
 
     // 8. Event listeners: Mouse parallax and Touch perspective
     const handleMouseMove = (e: MouseEvent) => {
